@@ -33,6 +33,16 @@ class MidiClass:
         
         notes = np.zeros(tracks[0].pianoroll.shape, dtype=bool)
         self.len = notes.shape[0]
+
+        # Which fraction of a beat does a timestep amount to?
+        beat_fraction = 1 / self.resolution
+        # How long does a beat last, for every timestep (there may be tempo changes
+        # in the middle of the piece)
+        beat_duration_seconds = 60 / mt.tempo
+        # Total duration in seconds
+        self.total_duration = np.sum(beat_duration_seconds * beat_fraction)
+
+
         for track in tracks:
             self.programs.append(track.program)
             if track.is_drum:
