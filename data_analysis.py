@@ -1,8 +1,6 @@
 from argparse import ArgumentParser
-from pretty_midi import PrettyMIDI
 import pypianoroll
 import numpy as np
-import pandas as pd
 import glob
 import os
 from tqdm import tqdm
