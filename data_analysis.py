@@ -63,6 +63,16 @@ def log_data(path, song_dict):
     with open(os.path.join(path, 'song_'+str(new_num).zfill(6)+'.json'), 'w') as f:
         json.dump(song_dict, f)
 
+
+def process_file(file_name):
+    try:
+        song = MidiClass(file_name)
+        name = os.path.split(file_name)[-1]
+        log_data(args.data_path, {name: song.__dict__})
+    except:
+        pass
+
+
 if __name__ == '__main__':
     parser = ArgumentParser()
     # model args
@@ -75,9 +85,4 @@ if __name__ == '__main__':
     #print(len(file_names))
     #print(1/0)
     for file_name in tqdm(file_names):
-        try:
-            song = MidiClass(file_name)
-            name = os.path.split(file_name)[-1]
-            log_data(args.data_path, {name:song.__dict__})
-        except:
-            pass
+        process_file(file_name)
