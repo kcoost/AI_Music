@@ -7,6 +7,7 @@ import glob
 import os
 from tqdm import tqdm
 import json
+import multiprocessing
 
 class MidiClass:
     def __init__(self, path):
@@ -76,13 +77,18 @@ def process_file(file_name):
 if __name__ == '__main__':
     parser = ArgumentParser()
     # model args
+    CPU_CORES = multiprocessing.cpu_count()
     parser.add_argument('--midi_path', type = str, default = "midis_cpdl/", help='N')
     parser.add_argument('--data_path', type = str, default = "song_data_cpdl/", help='N')#ethicscommonsense
+    parser.add_argument('--jobs', type = int, default = CPU_CORES, help='N')
 
     args = parser.parse_args()
 
     file_names = glob.glob(os.path.join(args.midi_path, '**/*.mid*'), recursive=True)
+    file_count = len(file_names)
     #print(len(file_names))
     #print(1/0)
-    for file_name in tqdm(file_names):
-        process_file(file_name)
+    print(f'Processing {file_count} files with {CPU_CORES} processes:')
+    with multiprocessing.Pool(processes=args.jobs) as p:
+        for file in tqdm(p.imap_unordered(process_file, file_names), total=file_count):
+            pass
