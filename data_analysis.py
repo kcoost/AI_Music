@@ -40,7 +40,7 @@ class MidiClass:
         # in the middle of the piece)
         beat_duration_seconds = 60 / mt.tempo
         # Total duration in seconds
-        self.total_duration = np.sum(beat_duration_seconds * beat_fraction)
+        self.total_duration = int(np.sum(beat_duration_seconds * beat_fraction))
 
 
         for track in tracks:
